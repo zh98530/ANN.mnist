@@ -1,5 +1,5 @@
 import tensorflow as tf
-from tensorflow.examples.tutorials.mnist import imput_data
+from tensorflow.examples.tutorials.mnist import input_data
 import mnist_forward
 import os
 
@@ -12,11 +12,13 @@ MOVING_AVERAGE_DECAY = 0.99
 MODEL_SAVE_PATH = "./model/"
 MODEL_NAME = "mnist_model"
 
-def backward():
-	x = tf.placeholder(tf.float32,[None,mnist_forward.IMPUT_NODE])
+def backward(mnist):
+	x = tf.placeholder(tf.float32,[None,mnist_forward.INPUT_NODE])
 	y_ = tf.placeholder(tf.float32,[None,mnist_forward.OUTPUT_NODE])
+	y = mnist_forward.forward(x,REGULARIZER)
+	global_step = tf.Variable(0,trainable=False)
 	
-	ce = tf.nn.sparse_softmax_cross_entropy_with_logits(logits=y_,argmax(y_,1))
+	ce = tf.nn.sparse_softmax_cross_entropy_with_logits(logits=y,labels=tf.argmax(y_,1))
 	cem = tf.reduce_mean(ce)
 	loss = cem + tf.add_n(tf.get_collection("losses"))
 	
@@ -47,9 +49,9 @@ def backward():
 				print("After %d training step(s),loss on training batch is %g." %(step,loss_value)) 
 				saver.save(sess,os.path.join(MODEL_SAVE_PATH,MODEL_NAME),global_step=global_step)
 
-def main()
+def main():
 	mnist = input_data.read_data_sets("./data/",one_hot=True)
 	backward(mnist)
 
-if _name_ == '_main_'
+if __name__ == '__main__':
 	main()
